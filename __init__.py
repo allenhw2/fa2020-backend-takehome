@@ -3,6 +3,7 @@ from flask import Flask, redirect
 import random, json, csv
 
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
 """
 
@@ -18,22 +19,30 @@ Implement an endpoint `/api/fetch` that returns the contents of `data.csv` as JS
 
 # your work here
 
+# opens the csv file from files, can be modified to take in outside csv's
 with open ("data.csv", "r") as f:
+
     reader = csv.reader(f)
+
+    #clearing the first label line
     next(reader)
+
+    #dictionary to store the csv values
     data = {"employees" : []}
+
+    #interates through the CSV and places them in a dictionary
     for row in reader:
-        name = row[1] + " " + row[2]
+
+        #doesn't need Id, and combines first and last name
         data["employees"].append({
-            "name": name,
+            "name": (row[1] + " " + row[2]),
             "timezone": row[3],
             "dept": row[4]})
 
 @app.route('/api/fetch')
 def index():
+    # automatically converts the data dictonary to JSON in python 3
     return data
-
-
 
 
 
