@@ -1,12 +1,12 @@
 from flask import Flask, redirect
 
-import random
+import random, json, csv
 
 app = Flask(__name__)
 
 """
 
-TASK
+TASK 
 
 Implement an endpoint `/api/fetch` that returns the contents of `data.csv` as JSON
 
@@ -17,6 +17,25 @@ Implement an endpoint `/api/fetch` that returns the contents of `data.csv` as JS
 """
 
 # your work here
+
+with open ("data.csv", "r") as f:
+    reader = csv.reader(f)
+    next(reader)
+    data = {"employees" : []}
+    for row in reader:
+        name = row[1] + " " + row[2]
+        data["employees"].append({
+            "name": name,
+            "timezone": row[3],
+            "dept": row[4]})
+
+@app.route('/api/fetch')
+def index():
+    return data
+
+
+
+
 
 """
 
@@ -41,24 +60,19 @@ def api_home():
                 padding: 5vh 30px 0 30px;
                 background: rgb(240,240,240);
             }
-
             pre, code {
                 background: #121212;
                 color: white;
             }
-
             code {
                 padding: 4px;
             }
-
             pre code {
                 padding: 0;
             }
-
             pre {
                 padding: 10px;
             }
-
             hr {
                 margin: 2em 0;
             }
@@ -79,3 +93,4 @@ Filename: /api/fetch</code></pre>
             <br />  }
             <br />  ...
         <br />]</code></pre>"""
+
